@@ -30,6 +30,7 @@ class StateMachine(smach.container.Container):
      - OUTCOME -> SM_OUTCOME
     """
     def __init__(self, outcomes, input_keys=[], output_keys=[]):
+        # type: (object, object, object) -> object
         """Constructor for smach StateMachine Container.
 
         @type outcomes: list of strings
