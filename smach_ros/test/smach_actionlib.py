@@ -148,13 +148,26 @@ class TestActionlib(unittest.TestCase):
                     remapping={'result': 'res_alias'})
             Sequence.add('RESULT_SLOTS_MAP_CHECK', AssertUDState(['res_alias']))
 
+            @cb_interface(outcomes=['foobar'])
+            def res_cb(ud, status, res):
+                if status != 0:
+                    return 'succeeded'
+                else:
+                    return 'foobar'
+
             Sequence.add('RESULT_CB_OUTCOME',
                     SimpleActionState(
                         "reference_action", TestAction,
                         goal=g1,
-                        result_cb=CBInterface(
-                            lambda ud, res_stat, res: 'foobar',
-                            outcomes=['foobar'])))
+                        result_cb=res_cb))
+
+            # Sequence.add('RESULT_CB_OUTCOME',
+            #         SimpleActionState(
+            #             "reference_action", TestAction,
+            #             goal=g1,
+            #             result_cb=CBInterface(
+            #                 lambda ud, res_stat, res: 'foobar',
+            #                 outcomes=['foobar'])))
 
         sq_outcome = sq.execute()
         assert sq_outcome == 'foobar'

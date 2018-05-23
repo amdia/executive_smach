@@ -71,6 +71,7 @@ class StateMachine(smach.container.Container):
         # Thread for execution of state switching
         self._execute_thread = None
         self.userdata = smach.UserData()
+        self.outcome = None
 
     ### Construction methods
     @staticmethod
@@ -270,9 +271,11 @@ class StateMachine(smach.container.Container):
         if outcome not in self._current_transitions:
             raise smach.InvalidTransitionError("Outcome '%s' of state '%s' is not bound to any transition target. Bound transitions include: %s" %
                     (str(outcome), str(self._current_label), str(self._current_transitions)))
-        
+
+        self.outcome = outcome
         # Set the transition target
         transition_target = self._current_transitions[outcome]
+        self.transition_target = transition_target
 
         # Check if the transition target is a state in this state machine, or an outcome of this state machine
         if transition_target in self._states:
@@ -312,6 +315,12 @@ class StateMachine(smach.container.Container):
                 raise smach.InvalidTransitionError("Outcome '%s' of state '%s' with transition target '%s' is neither a registered state nor a registered container outcome." %
                         (outcome, self._current_label, transition_target))
         return None
+
+    def get_next_state(self):
+        return self.transition_target
+
+    def get_last_outcome(self):
+        return self.outcome
 
     ### State Interface
     def execute(self, parent_ud = smach.UserData()):

@@ -3,7 +3,7 @@ import smach
 import threading
 
 
-__all__ = ['is_shutdown','set_shutdown_cb',\
+__all__ = ['is_shutdown','set_shutdown_check',\
         'cb_interface','has_smach_interface','CBInterface']
 
 def is_shutdown():
