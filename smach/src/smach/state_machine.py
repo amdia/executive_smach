@@ -513,6 +513,9 @@ class StateMachine(smach.container.Container):
         if len(errors) > 0:
             raise smach.InvalidTransitionError("State machine failed consistency check: "+errors+"\n\n\tAvailable states: "+str(list(available_states)))
 
+    def available_states(self):
+        return set(list(self._states.keys())+list(self.get_registered_outcomes()))
+
     ### Introspection methods
     def is_running(self):
         """Returns true if the state machine is running."""
